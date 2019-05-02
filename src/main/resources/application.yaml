@@ -1,0 +1,10 @@
+limter4j
+  app-name: limter4j-client
+  storage-type: momery/redis
+  redis:
+    host:
+    username:
+    password:
+  limter:
+    - all;200;s;fixed-window
+    - /test/say;200;s;slide-window
