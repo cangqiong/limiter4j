@@ -1,0 +1,11 @@
+limter4j:
+  app-name: limter4j-demo
+  storage-type: momery
+  enable: true
+  redis:
+    host:
+    username:
+    password:
+  limiters:
+    - ALL;200;1;fixed-window
+    - /say;200;1;slide-window

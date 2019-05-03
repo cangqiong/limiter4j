@@ -11,15 +11,33 @@ JDK8+Servlet3.0实现
 基于滑动窗口算法、令牌桶算法、漏桶算法等实现
 
 # 使用方式
-引入当前jar包，添加Fliter配置或者切面配置。
+引入当前jar包，添加Filter配置(可以参考Demo配置)或者切面配置。
 
+```java
+ @Bean
+    public FilterRegistrationBean testFilterRegistration() {
+        FilterRegistrationBean registration = new FilterRegistrationBean(new LimiterFilter());
+        registration.addUrlPatterns("/*");
+        registration.setName("limiterFilter");
+        return registration;
+    }
+```
 # 配置方式
 
-## 配置文件配置
-app-name=  #系统应用的名称，唯一
-
-url路径/all（全局声明）;流量个数 ;时间单位；限流算法(可以省略)
-
+## YAML文件配置
+```yaml
+limter4j:
+  app-name: limter4j-demo #系统应用的名称，唯一
+  storage-type: momery
+  enable: true
+  redis:
+    host:
+    username:
+    password:
+  limiters:
+    - ALL;200;1;fixed-window #url路径/ALL(全体);流量个数 ;时间单位；限流算法(可以省略)
+    - /say;200;1;slide-window
+```
 ## Filter配置
 
 ## 切面配置
