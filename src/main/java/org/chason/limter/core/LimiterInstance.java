@@ -1,9 +1,10 @@
 package org.chason.limter.core;
 
-import org.chason.limter.algorithm.FixedWindow;
+import org.chason.limter.algorithm.AbstractLimiterStrategy;
 import org.chason.limter.algorithm.LimiterStrategy;
 import org.chason.limter.config.Limiter;
 import org.chason.limter.config.LimiterConfig;
+import org.chason.limter.config.LimiterContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,17 +16,23 @@ import java.util.Map;
  **/
 public class LimiterInstance {
 
-    private Map<String, LimiterStrategy> strategyContext = new HashMap<>();
+    private LimiterContext limiterContext = new LimiterContext();
+
+    /**
+     * 限流实例上下文
+     */
+    private Map<String, AbstractLimiterStrategy> strategyInstanceContext = new HashMap<>();
 
     public LimiterInstance(LimiterConfig limiterConfig) {
         limiterConfig.getLimiterList().forEach((Limiter limiter) -> {
-            // TODO 先直接用默认算法
-            LimiterStrategy limiterStrategy = new FixedWindow(limiter.getUrl(), limiter.getTime(), limiter.getTimeUnit(), limiter.getLimitNum());
-            strategyContext.put(limiterConfig.getAppName() + limiter.getUrl(), limiterStrategy);
+            AbstractLimiterStrategy limiterStrategy = limiterContext.getLimiterStrategy(limiter.getLimitAlgorithm());
+            limiterStrategy.init(limiter.getKey(), limiter.getLimitNum(), limiter.getIntervalTime(), limiter.getTimeUnit());
+            strategyInstanceContext.put(limiterConfig.getAppName() + limiter.getKey(),
+                    limiterStrategy);
         });
     }
 
     public LimiterStrategy getLimiterStrategy(String requestURI) {
-        return strategyContext.get(requestURI);
+        return strategyInstanceContext.get(requestURI);
     }
 }

@@ -8,9 +8,24 @@ import java.util.concurrent.TimeUnit;
 @Data
 @AllArgsConstructor
 public class Limiter {
-    private String url;
+    /**
+     * 限流对应的key
+     */
+    private String key;
+    /**
+     * 最大访问次数
+     */
     private int limitNum;
-    private long time;
+    /**
+     * 单位时间
+     */
+    private long intervalTime;
+    /**
+     * 时间单位
+     */
     private TimeUnit timeUnit;
+    /**
+     * 算法
+     */
     private String limitAlgorithm;
 }

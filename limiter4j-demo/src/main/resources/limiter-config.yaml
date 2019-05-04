@@ -8,4 +8,4 @@ limter4j:
     password:
   limiters:
     - ALL;200;1;fixed-window
-    - /say;200;1;slide-window
+    - /say;2;1;slide-window
